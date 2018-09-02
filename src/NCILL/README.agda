@@ -11,6 +11,7 @@
 -- contexts are lists, not sets (STLC) or multisets (ILL).
 --
 -- Rendered HTML docs are at http://oleg.fi/ncill/
+-- Source code is at https://github.com/phadej/ncill
 --
 module NCILL.README where
 
