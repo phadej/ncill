@@ -15,6 +15,7 @@ open import NCILL.Admit.Action
 -- IMPLICATION
 ------------------------------------------------------------------------
 
+
 {-
 admit-impl-L-after : ∀ Γ Ψ Φ Δ₁ Δ₂ A B C D →
   Action2

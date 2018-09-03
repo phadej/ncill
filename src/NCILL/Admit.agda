@@ -20,6 +20,24 @@ open import NCILL.Admit.With
 open import NCILL.Admit.Zero
 open import NCILL.Admit.One
 
+admit-impl-L-before : ∀ Γ Δ₁ Δ₂ Ω₁ Ω₂ A B C D →
+  Ω₁ ++ A ∷ [] ≡ Δ₁ ++ C ∷ Δ₂ →
+  Action
+    Γ C
+    (Ω₁ ++ B ∷ Ω₂) D
+    (Δ₁ ++ Γ ++ Δ₂ ++ A ⊸ B ∷ Ω₂) D
+admit-impl-L-before = {!!}
+
+{-
+admit : ∀ {Ω₁ B A₁ B₁ Δ₂ Y} Γ Ψ →
+        Γ ⊢ A₁ ⊸ B₁ →
+        Ω₁ ++ B ∷ Ψ ++ A₁ ⊸ B₁ ∷ Δ₂ ⊢ Y →
+        ∀ {A} → ((Ω₁ ++ A ∷ []) ++ A ⊸ B ∷ Ψ) ++ Γ ++ Δ₂ ⊢ Y
+
+
+-}
+
+
 -- ADMISSIBILITY OF CUT
 ------------------------------------------------------------------------
 
@@ -47,14 +65,11 @@ admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _ (impl-R d) (impl-L Ω₁ {Ω₂} {A}
     obligation : Ω₁ ++ ([ A ] ++ Γ) ++ Δ₂ ≡ (Ω₁ ++ [ A ]) ++ Γ ++ Δ₂
     obligation = xs++[xs++xs]++xs≡[xs++xs]++xs++xs Ω₁ [ A ] Γ Δ₂
 
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _  d@(impl-R _ ) (impl-L Ω₁ {Ω₂} {A} {B} e) | before Ψ eq refl = ?
-{-
-  with admit-impl-L-before Γ Ψ Φ Δ₁ Ω₁ Ω₂ _ _ _ _ eq
-... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
-... | action₂ ctx ctx≡ f = f e₁ (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₂)
--}
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _  d@(impl-R _ ) (impl-L Ω₁ {Ω₂} {A} {B} e) | before Ψ eq refl
+  with admit-impl-L-before Γ Δ₁ Ψ Ω₁ Ω₂ _ _ _ _ eq
+... | action ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e)
 
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq d@(impl-R _) (impl-L Ω₁ {Ω₂} e) | after Ψ refl refl = ?
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq d@(impl-R _) (impl-L Ω₁ {Ω₂} e) | after Ψ refl refl = {!!}
 {-
   with admit-impl-L-after Γ Ψ Φ Ω₁ Δ₂ _ _ _ _
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
