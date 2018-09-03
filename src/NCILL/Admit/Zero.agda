@@ -12,28 +12,28 @@ open import NCILL.ProofUtils
 absurd-T0 : (Γ Δ₁ Δ₂ : Ctx) → (C : Ty) → Sqnt Γ ♯0 → Sqnt (Δ₁ ++ Γ ++ Δ₂) C
 absurd-T0 _ Δ₁ _ _ var = zero-L Δ₁
 
-absurd-T0 _ Δ₁ Δ₂ C (impl-L {Ψ} Ω₁ {Ω₂} {A} {B} t₁ t₂) =
-  process absurd-T0 (Ω₁ ++ B ∷ Ω₂) Δ₁ Δ₂ C t₂ by
-    Δ₁ ++ (Ω₁ ++ B ∷ Ω₂) ++ Δ₂          ⊢ C ≡Γ⟨ obligation₂ ⟩
-    (Δ₁ ++ Ω₁) ++ B ∷ Ω₂ ++ Δ₂          ⊢ C $⟨ impl-L (Δ₁ ++ Ω₁) t₁ ⟩
-    (Δ₁ ++ Ω₁) ++ Ψ ++ A ⊸ B ∷ Ω₂ ++ Δ₂ ⊢ C ≡Γ⟨ obligation₁ ⟩
-    Δ₁ ++ (Ω₁ ++ Ψ ++ A ⊸ B ∷ Ω₂) ++ Δ₂ ⊢ C ∎
+absurd-T0 _ Δ₁ Δ₂ C (impl-L Ω₁ {Ω₂} {A} {B} t) =
+  process absurd-T0 (Ω₁ ++ B ∷ Ω₂) Δ₁ Δ₂ C t by
+    Δ₁ ++ (Ω₁ ++ B ∷ Ω₂) ++ Δ₂         ⊢ C ≡Γ⟨ obligation₂ ⟩
+    (Δ₁ ++ Ω₁) ++ B ∷ Ω₂ ++ Δ₂         ⊢ C $⟨ impl-L (Δ₁ ++ Ω₁) ⟩
+    (Δ₁ ++ Ω₁) ++ A ∷ A ⊸ B ∷ Ω₂ ++ Δ₂ ⊢ C ≡Γ⟨ obligation₁ ⟩
+    Δ₁ ++ (Ω₁ ++ A ∷ A ⊸ B ∷ Ω₂) ++ Δ₂ ⊢ C ∎
   where
-    obligation₁ : (Δ₁ ++ Ω₁) ++ Ψ ++ A ⊸ B ∷ Ω₂ ++ Δ₂ ≡ Δ₁ ++ (Ω₁ ++ Ψ ++ A ⊸ B ∷ Ω₂) ++ Δ₂
-    obligation₁ = [xs++xs]++xs++xs++xs≡xs++[xs++xs++xs]++xs Δ₁ Ω₁ Ψ (A ⊸ B ∷ Ω₂) Δ₂
+    obligation₁ : (Δ₁ ++ Ω₁) ++ A ∷ A ⊸ B ∷ Ω₂ ++ Δ₂ ≡ Δ₁ ++ (Ω₁ ++ A ∷ A ⊸ B ∷ Ω₂) ++ Δ₂
+    obligation₁ = [xs++xs]++xs++xs≡xs++[xs++xs]++xs Δ₁ Ω₁ (A ∷ A ⊸ B ∷ Ω₂) Δ₂
 
     obligation₂ : Δ₁ ++ (Ω₁ ++ B ∷ Ω₂) ++ Δ₂ ≡ (Δ₁ ++ Ω₁) ++ B ∷ Ω₂ ++ Δ₂
     obligation₂ = xs++[xs++xs]++xs≡[xs++xs]++xs++xs Δ₁ Ω₁ (B ∷ Ω₂) Δ₂
 
-absurd-T0 _ Δ₁ Δ₂ C (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {B} t₁ t₂) =
-  process absurd-T0 (Ω₁ ++ B ∷ Ω₂) Δ₁ Δ₂ C t₂ by
-    Δ₁ ++ (Ω₁ ++ B ∷ Ω₂) ++ Δ₂           ⊢ C ≡Γ⟨ obligation₂ ⟩
-    (Δ₁ ++ Ω₁) ++ B ∷ Ω₂ ++ Δ₂           ⊢ C $⟨ impl-Lʳ (Δ₁ ++ Ω₁) t₁ ⟩
-    (Δ₁ ++ Ω₁) ++ A ⊸ʳ B ∷ Ψ ++ Ω₂ ++ Δ₂ ⊢ C ≡Γ⟨ obligation₁ ⟩
-    Δ₁ ++ (Ω₁ ++ A ⊸ʳ B ∷ Ψ ++ Ω₂) ++ Δ₂ ⊢ C ∎
+absurd-T0 _ Δ₁ Δ₂ C (impl-Lʳ Ω₁ {Ω₂} {A} {B} t) =
+  process absurd-T0 (Ω₁ ++ B ∷ Ω₂) Δ₁ Δ₂ C t by
+    Δ₁ ++ (Ω₁ ++ B ∷ Ω₂) ++ Δ₂          ⊢ C ≡Γ⟨ obligation₂ ⟩
+    (Δ₁ ++ Ω₁) ++ B ∷ Ω₂ ++ Δ₂          ⊢ C $⟨ impl-Lʳ (Δ₁ ++ Ω₁) ⟩
+    (Δ₁ ++ Ω₁) ++ A ⊸ʳ B ∷ A ∷ Ω₂ ++ Δ₂ ⊢ C ≡Γ⟨ obligation₁ ⟩
+    Δ₁ ++ (Ω₁ ++ A ⊸ʳ B ∷ A ∷ Ω₂) ++ Δ₂ ⊢ C ∎
   where
-    obligation₁ : (Δ₁ ++ Ω₁) ++ A ⊸ʳ B ∷ Ψ ++ Ω₂ ++ Δ₂ ≡ Δ₁ ++ (Ω₁ ++ A ⊸ʳ B ∷ Ψ ++ Ω₂) ++ Δ₂
-    obligation₁ = [xs++xs]++xs++xs++xs≡xs++[xs++xs++xs]++xs Δ₁ Ω₁ (A ⊸ʳ B ∷ Ψ) Ω₂ Δ₂
+    obligation₁ : (Δ₁ ++ Ω₁) ++ A ⊸ʳ B ∷ A ∷ Ω₂ ++ Δ₂ ≡ Δ₁ ++ (Ω₁ ++ A ⊸ʳ B ∷ A ∷  Ω₂) ++ Δ₂
+    obligation₁ = [xs++xs]++xs++xs≡xs++[xs++xs]++xs Δ₁ Ω₁ (A ⊸ʳ B ∷ A ∷ Ω₂) Δ₂
 
     obligation₂ : Δ₁ ++ (Ω₁ ++ B ∷ Ω₂) ++ Δ₂ ≡ (Δ₁ ++ Ω₁) ++ B ∷ Ω₂ ++ Δ₂
     obligation₂ = xs++[xs++xs]++xs≡[xs++xs]++xs++xs Δ₁ Ω₁ (B ∷ Ω₂) Δ₂

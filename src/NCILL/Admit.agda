@@ -39,31 +39,30 @@ admissibility-of-cut Γ _ Δ₁ _ _ _ p d var with singleton-lemma Δ₁ p
 -- LINEAR IMPLICATION
 ------------------------------------------------------------------------
 
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq (impl-R d) (impl-L {Ψ} Ω₁ {Ω₂} e₁ e₂)
-  with match-cons-2 Ω₁ Ψ Δ₁ {Ω₂} {Δ₂} eq
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _ (impl-R d) (impl-L {Ψ} Ω₁ {Ω₂} {A} {B} e₁ e₂) | here refl refl refl
-  = subst-Sqnt-Γ obligation e
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq (impl-R d) (impl-L Ω₁ {Ω₂} {A} e)
+  with match-cons-2 Ω₁ [ A ] Δ₁ {Ω₂} {Δ₂} eq
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _ (impl-R d) (impl-L Ω₁ {Ω₂} {A} {B} e) | here refl refl refl
+  = subst-Sqnt-Γ obligation (admissibility-of-cut _ _ Ω₁ _ _ _ refl d e)
   where
-    d′ : Ψ ++ Γ ⊢ B
-    d′ = admissibility-of-cut _ _ [] _ _ _ refl e₁ d
+    obligation : Ω₁ ++ ([ A ] ++ Γ) ++ Δ₂ ≡ (Ω₁ ++ [ A ]) ++ Γ ++ Δ₂
+    obligation = xs++[xs++xs]++xs≡[xs++xs]++xs++xs Ω₁ [ A ] Γ Δ₂
 
-    e : Ω₁ ++ (Ψ ++ Γ) ++ Δ₂ ⊢ Y
-    e = admissibility-of-cut _ _ Ω₁ _ _ _ refl d′ e₂
-
-    obligation : Ω₁ ++ (Ψ ++ Γ) ++ Δ₂ ≡ (Ω₁ ++ Ψ) ++ Γ ++ Δ₂
-    obligation = xs++[xs++xs]++xs≡[xs++xs]++xs++xs Ω₁ Ψ Γ Δ₂
-
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _  d@(impl-R _ ) (impl-L {Ψ} Ω₁ {Ω₂} {A} {B} e₁ e₂) | before Φ eq refl
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _  d@(impl-R _ ) (impl-L Ω₁ {Ω₂} {A} {B} e) | before Ψ eq refl = ?
+{-
   with admit-impl-L-before Γ Ψ Φ Δ₁ Ω₁ Ω₂ _ _ _ _ eq
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
 ... | action₂ ctx ctx≡ f = f e₁ (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₂)
+-}
 
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq d@(impl-R _) (impl-L {Ψ} Ω₁ {Ω₂} e₁ e₂) | after Φ refl refl
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq d@(impl-R _) (impl-L Ω₁ {Ω₂} e) | after Ψ refl refl = ?
+{-
   with admit-impl-L-after Γ Ψ Φ Ω₁ Δ₂ _ _ _ _
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
 ... | action₂ ctx ctx≡ f = f e₁ (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₂)
+-}
 
-admissibility-of-cut Γ _ Δ₁ Δ₂ _ _ eq (impl-L {Ψ} Ω₁ {Ω₂} {A} {B} d₁ d₂) e =
+admissibility-of-cut Γ _ Δ₁ Δ₂ _ _ eq (impl-L Ω₁ {Ω₂} {A} {B} d ) e = {!!}
+{-
   subst-Sqnt-Γ obligation₁
   (impl-L (Δ₁ ++ Ω₁) d₁
   (subst-Sqnt-Γ obligation₂
@@ -74,10 +73,11 @@ admissibility-of-cut Γ _ Δ₁ Δ₂ _ _ eq (impl-L {Ψ} Ω₁ {Ω₂} {A} {B} 
 
     obligation₂ : Δ₁ ++ (Ω₁ ++ B ∷ Ω₂) ++ Δ₂ ≡ (Δ₁ ++ Ω₁) ++ B ∷ Ω₂ ++ Δ₂
     obligation₂ = xs++[xs++xs]++xs≡[xs++xs]++xs++xs Δ₁ Ω₁ (B ∷ Ω₂) Δ₂
-
+-}
 admissibility-of-cut Γ _ Δ₁ Δ₂ _ _ refl d (impl-R e)
   = impl-R (admissibility-of-cut _ _ (_ ∷ Δ₁) _ _ _ refl d e)
 
+{-
 admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq d@(impl-Rʳ _)   (impl-L {Ψ} Ω₁ {Ω₂} e₁ e₂)
   with admit-impl-L Γ Ψ Δ₁ Δ₂ Ω₁ Ω₂ _ _ _ Y eq (λ ())
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
@@ -106,11 +106,12 @@ admissibility-of-cut Γ _ Δ₁ Δ₂ X Y eq d@top-R         (impl-L {Ψ} Ω₁ 
   with admit-impl-L Γ Ψ Δ₁ Δ₂ Ω₁ Ω₂ _ _ _ Y eq (λ ())
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
 ... | action₂ ctx ctx≡ f = f e₁ (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₂)
+-}
 
 -- REVERSE LINEAR IMPLICATION
 ------------------------------------------------------------------------
 
-admissibility-of-cut Γ _ Δ₁ Δ₂ a b p (impl-Rʳ d) (impl-Lʳ {Ψ} Ω₁ {Ω₂} {C} {D} e₁ e₂) with match-cons Ω₁ Δ₁ p
+admissibility-of-cut Γ _ Δ₁ Δ₂ a b p (impl-Rʳ d) (impl-Lʳ Ω₁ {Ω₂} {C} {D} e) = {!!} {- with match-cons Ω₁ Δ₁ p
 ... | here refl refl refl = subst-Sqnt-Γ obligation e
   where
     d′ : Sqnt (Γ ++ Ψ ++ []) D
@@ -124,17 +125,21 @@ admissibility-of-cut Γ _ Δ₁ Δ₂ a b p (impl-Rʳ d) (impl-Lʳ {Ψ} Ω₁ {�
       (bla :++ (bla :++ bla :++ :[]) :++ bla :≡ bla :++ bla :++ bla :++ bla)
       Ω₁ Γ Ψ Ω₂
 
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _ d@(impl-Rʳ _) (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {B} e₁ e₂) | after Φ q refl
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _ d@(impl-Rʳ _) (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {B} e₁ e₂) | after Φ q refl = ?
+{-
   with admit-app-L-after Γ Ψ Φ Δ₂ Ω₁ Ω₂ X Y A B q
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
 ... | action₂ ctx ctx≡ f = f e₁ (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₂)
-
-admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _ d@(impl-Rʳ _) (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {B} e₁ e₂) | before Φ refl refl
+-}
+admissibility-of-cut Γ _ Δ₁ Δ₂ X Y _ d@(impl-Rʳ _) (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {B} e₁ e₂) | before Φ refl refl = ?
+{-
   with admit-app-L-before  Γ Ψ Φ Δ₁ Ω₂ X Y A B
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
 ... | action₂ ctx ctx≡ f = f e₁ (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₂)
-
-admissibility-of-cut Γ Δ  Δ₁ Δ₂ _ _ p (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {B} d1 d2) e =
+-}
+-}
+admissibility-of-cut Γ Δ  Δ₁ Δ₂ _ _ p (impl-Lʳ Ω₁ {Ω₂} {A} {B} d) e = {!!}
+{-
   subst-Sqnt-Γ obligation₂
   (impl-Lʳ (Δ₁ ++ Ω₁) d1
   (subst-Sqnt-Γ obligation₁
@@ -149,7 +154,7 @@ admissibility-of-cut Γ Δ  Δ₁ Δ₂ _ _ p (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {
 
     obligation₂ : (Δ₁ ++ Ω₁) ++ A ⊸ʳ B ∷ Ψ ++ Ω₂ ++ Δ₂ ≡ Δ₁ ++ (Ω₁ ++ A ⊸ʳ B ∷ Ψ ++ Ω₂) ++ Δ₂
     obligation₂ = [xs++xs]++xs++xs++xs≡xs++[xs++xs++xs]++xs Δ₁ Ω₁ (A ⊸ʳ B ∷ Ψ) Ω₂ Δ₂
-
+-}
 admissibility-of-cut Γ Δ Δ₁ Δ₂ a b refl d (impl-Rʳ {Γ = Γ2} {A = c} {B = b2}  e) =
   impl-Rʳ (subst-Sqnt-Γ obligation₂ e′)
   where
@@ -162,6 +167,7 @@ admissibility-of-cut Γ Δ Δ₁ Δ₂ a b refl d (impl-Rʳ {Γ = Γ2} {A = c} {
     obligation₂ : Δ₁ ++ Γ ++ Δ₂ ++ [ c ] ≡ (Δ₁ ++ Γ ++ Δ₂) ++ [ c ]
     obligation₂ = xs++xs++xs++xs≡[xs++xs++xs]++xs Δ₁ Γ Δ₂ [ c ]
 
+{-
 admissibility-of-cut Γ _ Δ₁ Δ₂ Y X eq d@(impl-R _)    (impl-Lʳ {Ψ} Ω₁ {Ω₂} {A} {B} e₁ e₂)
   with admit-app-L Γ Ψ Δ₁ Δ₂ Ω₁ Ω₂ A B X Y eq (λ ())
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
@@ -190,10 +196,12 @@ admissibility-of-cut Γ _ Δ₁ Δ₂ Y X eq d@top-R         (impl-Lʳ {Ψ} Ω�
   with admit-app-L Γ Ψ Δ₁ Δ₂ Ω₁ Ω₂ A B X Y eq (λ ())
 ... | action₁ ctx ctx≡ f = f (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₁) e₂
 ... | action₂ ctx ctx≡ f = f e₁ (admissibility-of-cut _ _ ctx _ _ _ ctx≡ d e₂)
+-}
 
 -- TIMES
 ------------------------------------------------------------------------
 
+{-
 admissibility-of-cut _ _ Δ₁ _ _ _ eq (times-R _ _) (times-L Ω₁ _) with match-cons Ω₁ Δ₁ eq
 admissibility-of-cut _ _ Δ₁ Δ₂ _ X eq (times-R {Γ₁} {Γ₂} {A} {B} d₁ d₂) (times-L Ω₁ e) | here refl refl refl =
   subst-Sqnt-Γ obligation₂ e₂
@@ -520,3 +528,4 @@ admissibility-of-cut Γ _ Δ₁ Δ₂ _ _ _ d (zero-L Ω₁ {Ω₂}) | after Ψ 
 ------------------------------------------------------------------------
 
 admissibility-of-cut _ _ _ _ _ _ _ _ top-R = top-R
+-}

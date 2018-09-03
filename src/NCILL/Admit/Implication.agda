@@ -15,6 +15,7 @@ open import NCILL.Admit.Action
 -- IMPLICATION
 ------------------------------------------------------------------------
 
+{-
 admit-impl-L-after : ∀ Γ Ψ Φ Δ₁ Δ₂ A B C D →
   Action2
     Γ C
@@ -151,3 +152,4 @@ admit-app-L Γ Ψ Δ₁ _ _ Ω₂ A B C D _ _  | before Φ refl refl =
   admit-app-L-before Γ Ψ Φ Δ₁ Ω₂ D C A B
 admit-app-L Γ Ψ _ Δ₂ Ω₁ Ω₂ A B C D _ _  | after Φ eq refl =
   admit-app-L-after Γ Ψ Φ Δ₂ Ω₁ Ω₂ D C A B eq
+-}
