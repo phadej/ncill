@@ -243,3 +243,34 @@ lin-equiv₁ _ _ f = impl-Rʳ (cut [ _ ] f (impl-L [] var var))
 
 lin-equiv₂ : ∀ A B → [] ⊢ A ⊸ʳ B → [] ⊢ A ⊸ B
 lin-equiv₂ _ _ f = impl-R (cut [] f (impl-Lʳ [] var var))
+
+-- Boolean algebra, almost
+------------------------------------------------------------------------
+
+-- & as AND
+-- ⊕ as OR
+-- And we almost have Boolean algebra.
+-- The connectives only distribute on one direction of two.
+
+-- Only other direction holds
+&-⊕-half-distr : ∀ A B C → [ (A & B) ⊕ (A & C) ] ⊢ A & (B ⊕ C)
+&-⊕-half-distr _ _ _ = plus-L []
+  (with-R (with-L₁ [] var) (plus-R₁ (with-L₂ [] var)))
+  (with-R (with-L₁ [] var) (plus-R₂ (with-L₂ [] var)))
+
+&-annih : ∀ A → A & ♯0 o-o ♯0
+&-annih _ = record { lfwd = with-L₂ [] var ; lbwd = zero-L [] }
+
+⊕-annih : ∀ A → A ⊕ ♯⊤ o-o ♯⊤
+⊕-annih _ = record { lfwd = top-R ; lbwd = plus-R₂ var }
+
+&-⊕-absorp : ∀ A B → A & (A ⊕ B) o-o A
+&-⊕-absorp _ _ = record { lfwd = with-L₁ [] var ; lbwd = with-R var (plus-R₁ var) }
+
+⊕-&-absorp : ∀ A B → A ⊕ (A & B) o-o A
+⊕-&-absorp _ _ = record { lfwd = plus-L [] var (with-L₁ [] var) ; lbwd = plus-R₁ var }
+
+⊕-&-half-distr : ∀ A B C → [ A ⊕ (B & C) ] ⊢ (A ⊕ B) & (A ⊕ C)
+⊕-&-half-distr _ _ _ = with-R
+  (plus-L [] (plus-R₁ var) (plus-R₂ (with-L₁ [] var)))
+  (plus-L [] (plus-R₁ var) (plus-R₂ (with-L₂ [] var)))
