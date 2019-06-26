@@ -7,7 +7,7 @@ open import Data.List.Properties
 open import Data.Product
 open import Data.Vec using(Vec; []; _∷_; lookup)
 
-open import Data.Nat.Properties.Simple
+open import Data.Nat.Properties
 import Data.Vec.Properties as V
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl; trans; sym; cong; cong₂; subst)
